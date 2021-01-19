@@ -1,5 +1,4 @@
 const game = gameObject()
-console.log(game)
 
 function gameObject() {
     const game = {
@@ -119,52 +118,48 @@ function gameObject() {
     return game
 }
 
-function numPointsScored(name) {
+function getTeams(){
+    const teams = []
     for (let gameKey in game) {
         let teamObj = game[gameKey]
-        for (let teamKey in teamObj) {
-            let players = teamObj.players
-            for (let key in players){
-                if (key === name) {
-                    let pointsScored = players[key].points
-                    return pointsScored
-                }
-            }
+        teams.push(teamObj)
+    }
+    return teams
+}
+
+function getPlayers(){
+    let allPlayers = []
+    for (let gameKey in game) {
+        let teamObj = game[gameKey]
+        let players = teamObj.players
+        for (key in players) {
+            allPlayers.push({[key]: players[key]})
         }
     }
+    return allPlayers
+}
+
+function numPointsScored(name) {
+    let stats = playerStats(name)
+    return stats[name].points
 }
 
 function shoeSize(name) {
-    for (let gameKey in game) {
-        let teamObj = game[gameKey]
-        for (let teamKey in teamObj) {
-            let players = teamObj.players
-            for (let key in players){
-                if (key === name) {
-                    return players[key].shoe
-                }
-            }
-        }
-    }
+    let stats = playerStats(name)
+    return stats[name].shoe
 }
 
 function teamColors(team) {
-    for (let gameKey in game) {
-        let teamObj = game[gameKey]
-        let teamName = teamObj.teamName
-            if (teamName === team) {
-                return teamObj.colors
-            }
-    }
+    let teams = getTeams()
+    found_team = teams.find((teamHash) => teamHash.teamName == team)
+    return found_team.colors
 }
 
 function teamNames() {
-    let teams = []
-    for (let gameKey in game) {
-        let teamObj = game[gameKey]
-            teams.push(teamObj.teamName)
-    }
-    return teams
+    let teams = getTeams()
+    let teamsArray = []
+    teams.forEach((teamHash) => teamsArray.push(teamHash.teamName))
+    return teamsArray
 }
 
 function playerNumbers(team) {
@@ -182,45 +177,39 @@ function playerNumbers(team) {
 }
 
 function playerStats(name) {
-    for (let gameKey in game) {
-        let teamObj = game[gameKey]
-        for (let teamKey in teamObj) {
-            let players = teamObj.players
-            for (let key in players){
-                if (key === name) {
-                    return players[key]
-                }
+    let players = getPlayers()
+    return players.find((player) => {
+        for (let key in player) {
+            if (key === name){
+                return player
             }
         }
-    }
+    })
 }
 
 function bigShoeRebounds() {
+    const players = getPlayers()
     let biggestShoe = null
     let rebounds = null
-    for (let gameKey in game) {
-        let teamObj = game[gameKey]
-        for (let teamKey in teamObj) {
-            let players = teamObj.players
-            for (let key in players){
-                let playerData = players[key]
-                if (playerData.shoe > biggestShoe) {
-                    biggestShoe = playerData.shoe
-                    rebounds = players[key].rebounds
-                }
+    players.forEach((player) =>{
+        for (key in player) {
+            if (player[key].rebounds > rebounds) {
+                biggestShoe = player[key].shoe
             }
         }
-    }
-    return rebounds
+    })
+    return biggestShoe
 }
 
 
 
 
-console.log(numPointsScored("Jason Terry"))
-console.log(shoeSize("Jeff Adrien"))
-console.log(teamColors("Charlotte Hornets"))
-console.log(teamNames())
-console.log(playerNumbers("Charlotte Hornets"))
-console.log(playerStats("Ben Gordon"))
-console.log(bigShoeRebounds())
+
+// console.log(numPointsScored("Jason Terry"))
+// console.log(shoeSize("Jeff Adrien"))
+// console.log(teamColors("Charlotte Hornets"))
+// console.log(teamNames())
+// console.log(playerNumbers("Charlotte Hornets"))
+// console.log(playerStats("Ben Gordon"))
+// console.log(bigShoeRebounds())
+// console.log(getPlayers())
