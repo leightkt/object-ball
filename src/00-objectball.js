@@ -133,7 +133,8 @@ function getPlayers(){
         let teamObj = game[gameKey]
         let players = teamObj.players
         for (key in players) {
-            allPlayers.push({[key]: players[key]})
+            players[key].name = key
+            allPlayers.push(players[key])
         }
     }
     return allPlayers
@@ -141,12 +142,12 @@ function getPlayers(){
 
 function numPointsScored(name) {
     let stats = playerStats(name)
-    return stats[name].points
+    return stats.points
 }
 
 function shoeSize(name) {
     let stats = playerStats(name)
-    return stats[name].shoe
+    return stats.shoe
 }
 
 function teamColors(team) {
@@ -178,13 +179,7 @@ function playerNumbers(team) {
 
 function playerStats(name) {
     let players = getPlayers()
-    return players.find((player) => {
-        for (let key in player) {
-            if (key === name){
-                return player
-            }
-        }
-    })
+    return players.find(player => player.name === name)
 }
 
 function bigShoeRebounds() {
@@ -192,13 +187,12 @@ function bigShoeRebounds() {
     let biggestShoe = null
     let rebounds = null
     players.forEach((player) =>{
-        for (key in player) {
-            if (player[key].rebounds > rebounds) {
-                biggestShoe = player[key].shoe
-            }
+        if (player.shoe > biggestShoe){
+            rebounds = player.rebounds
+            biggestShoe = player.shoe
         }
     })
-    return biggestShoe
+    return rebounds
 }
 
 
@@ -211,5 +205,5 @@ function bigShoeRebounds() {
 // console.log(teamNames())
 // console.log(playerNumbers("Charlotte Hornets"))
 // console.log(playerStats("Ben Gordon"))
-// console.log(bigShoeRebounds())
+console.log(bigShoeRebounds())
 // console.log(getPlayers())
