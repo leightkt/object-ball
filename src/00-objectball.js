@@ -128,7 +128,7 @@ function getTeams(){
 }
 
 function getPlayers(){
-    let allPlayers = []
+    const allPlayers = []
     for (let gameKey in game) {
         let teamObj = game[gameKey]
         let players = teamObj.players
@@ -141,57 +141,50 @@ function getPlayers(){
 }
 
 function numPointsScored(name) {
-    let stats = playerStats(name)
+    const stats = playerStats(name)
     return stats.points
 }
 
 function shoeSize(name) {
-    let stats = playerStats(name)
+    const stats = playerStats(name)
     return stats.shoe
 }
 
 function teamColors(team) {
-    let teams = getTeams()
+    const teams = getTeams()
     found_team = teams.find((teamHash) => teamHash.teamName == team)
     return found_team.colors
 }
 
 function teamNames() {
-    let teams = getTeams()
-    let teamsArray = []
+    const teams = getTeams()
+    const teamsArray = []
     teams.forEach((teamHash) => teamsArray.push(teamHash.teamName))
     return teamsArray
 }
 
 function playerNumbers(team) {
-    let numbers = []
-    for (let gameKey in game) {
-        let teamObj = game[gameKey]
-            if (teamObj.teamName === team) {
-                let players = teamObj.players
-                for (let key in players) {
-                    numbers.push(players[key].number)
-                }
-            }
+    const numbers = []
+    const teams = getTeams()
+    found_team = teams.find((teamHash) => teamHash.teamName == team)
+    const players = found_team.players
+    for (key in players){
+        numbers.push(players[key].number)
     }
     return numbers
 }
 
 function playerStats(name) {
-    let players = getPlayers()
+    const players = getPlayers()
     return players.find(player => player.name === name)
 }
 
 function bigShoeRebounds() {
     const players = getPlayers()
-    let biggestShoe = null
     let rebounds = null
-    players.forEach((player) =>{
-        if (player.shoe > biggestShoe){
-            rebounds = player.rebounds
-            biggestShoe = player.shoe
-        }
-    })
+    players.reduce((shoe, player) => {
+        player.shoe > shoe ? player.shoe : shoe; rebounds = player.rebounds
+    }, players[0].shoe)
     return rebounds
 }
 
@@ -199,11 +192,11 @@ function bigShoeRebounds() {
 
 
 
-// console.log(numPointsScored("Jason Terry"))
-// console.log(shoeSize("Jeff Adrien"))
-// console.log(teamColors("Charlotte Hornets"))
-// console.log(teamNames())
-// console.log(playerNumbers("Charlotte Hornets"))
-// console.log(playerStats("Ben Gordon"))
+console.log(numPointsScored("Jason Terry"))
+console.log(shoeSize("Jeff Adrien"))
+console.log(teamColors("Charlotte Hornets"))
+console.log(teamNames())
+console.log(playerNumbers("Charlotte Hornets"))
+console.log(playerStats("Ben Gordon"))
 console.log(bigShoeRebounds())
-// console.log(getPlayers())
+console.log(getPlayers())
